@@ -13,25 +13,40 @@
         android:theme="@style/Theme.Student"
         tools:targetApi="31">
         <activity
-            android:name=".UI.MentorMain"
-            android:label="Mentor Page"
-            android:parentActivityName=".UI.MainActivity"
+            android:name=".UI.AssessmentDetails"
+            android:label="Assessment Details"
+            android:parentActivityName=".UI.AssessmentsMain"
             android:exported="false" />
+        <activity
+            android:name=".UI.CourseDetails"
+            android:exported="false"
+            android:label="Course Details"
+            android:parentActivityName=".UI.CoursesMain" />
+        <activity
+            android:name=".UI.TermsDetails"
+            android:exported="false"
+            android:label="Terms Add Details"
+            android:parentActivityName=".UI.TermsMain" />
+        <activity
+            android:name=".UI.MentorMain"
+            android:exported="false"
+            android:label="Mentor Page"
+            android:parentActivityName=".UI.MainActivity" />
         <activity
             android:name=".UI.AssessmentsMain"
+            android:exported="false"
             android:label="Assessments"
-            android:parentActivityName=".UI.MainActivity"
-            android:exported="false" />
+            android:parentActivityName=".UI.MainActivity" />
         <activity
             android:name=".UI.CoursesMain"
+            android:exported="false"
             android:label="Courses"
-            android:parentActivityName=".UI.MainActivity"
-            android:exported="false" />
+            android:parentActivityName=".UI.MainActivity" />
         <activity
             android:name=".UI.TermsMain"
+            android:exported="false"
             android:label="Terms"
             android:parentActivityName=".UI.MainActivity"
-            android:exported="false"
             android:theme="@style/Theme.Student" />
         <activity
             android:name=".UI.MainActivity"
