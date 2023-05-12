@@ -8,6 +8,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -15,16 +16,19 @@ import java.util.List;
 public interface TermDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void InsertTerm(Term term);
+    void insertTerm(Term term);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Term> terms);
 
+    @Update
+    void updateTerm(Term term);
+
     @Delete
     void deleteTerm(Term term);
 
-    @Query("SELECT * FROM terms WHERE term_id = :termID")
-    Term getTermByID(int termID);
+    @Query("SELECT * FROM terms WHERE term_id = :term_ID")
+    Term getTermByID(int term_ID);
 
     @Query("SELECT * FROM terms ORDER BY term_start ASC")
     LiveData<List<Term>> getAllTerms();
