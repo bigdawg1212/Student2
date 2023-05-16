@@ -1,4 +1,4 @@
-package android.reserver.student.UI;
+package android.reserver.student.Adapters;
 
 //@+id/textView7
 
@@ -14,41 +14,39 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder> {
-    class TermViewHolder extends RecyclerView.ViewHolder{
 
-        private List<Term> terms = new ArrayList<>();
-        private AdapterView.OnItemClickListener listener;
+    private List<Term> terms = new ArrayList<>();
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(Term term);
+    }
+
+    class TermViewHolder extends RecyclerView.ViewHolder {
 
         private TextView termIDView;
         private TextView termTitleView;
         private TextView termStartDateView;
         private TextView termEndDateView;
-        private TermViewHolder(View itemView){
+
+
+        private TermViewHolder(View itemView) {
             super(itemView);
 
             termTitleView = itemView.findViewById(R.id.termTitle);
             termStartDateView = itemView.findViewById(R.id.termStartDate);
             termEndDateView = itemView.findViewById(R.id.termEndDate);
 
-
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position=getAdapterPosition();
-                    final Term current=mTerms.get(position);
-                    Intent intent=new Intent(context, Course.class);
-                    intent.putExtra("id", current.getTerm_id());
-                    intent.putExtra("title", current.getTerm_title());
-                    intent.putExtra("term start", current.getTerm_start());
-                    intent.putExtra("term end", current.getTerm_end());
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(terms.get(position));
                 }
             });
         }
@@ -58,43 +56,49 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
     private List<Term> mTerms;
     private final Context context;
     private final LayoutInflater mInflater;
-    public TermAdapter(Context context) {
-        mInflater=LayoutInflater.from(context);
-        this.context=context;
-    }
 
+    public TermAdapter(Context context) {
+        mInflater = LayoutInflater.from(context);
+        this.context = context;
+    }
 
 
     @NonNull
     @Override
     public TermAdapter.TermViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView=mInflater.inflate(R.layout.term_list_item,parent, false);
+        View itemView = mInflater.inflate(R.layout.term_list_item, parent, false);
         return new TermViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull TermAdapter.TermViewHolder holder, int position) {
-        if(mTerms != null) {
-            Term currentTerm=mTerms.get(position);
+        if (mTerms != null) {
+            Term currentTerm = mTerms.get(position);
             holder.termTitleView.setText(currentTerm.getTerm_title());
             holder.termStartDateView.setText(currentTerm.getTerm_start());
             holder.termEndDateView.setText(currentTerm.getTerm_end());
-        }
-        else{
+        } else {
             holder.termTitleView.setText("No term title");
         }
     }
 
     public void setTerms(List<Term> terms) {
-        mTerms=terms;
+        mTerms = terms;
         notifyDataSetChanged();
+    }
+
+    public Term getTermAt(int position) {
+        return terms.get(position);
     }
 
     @Override
     public int getItemCount() {
-        if(mTerms != null){
-        return mTerms.size();
-        }
-        else return 0;
+        if (mTerms != null) {
+            return mTerms.size();
+        } else return 0;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

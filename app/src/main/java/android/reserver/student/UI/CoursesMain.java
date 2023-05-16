@@ -25,4 +25,5 @@ public class CoursesMain extends AppCompatActivity {
             }
         });
     }
+
 }
