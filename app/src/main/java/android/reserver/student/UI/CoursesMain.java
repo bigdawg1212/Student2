@@ -11,6 +11,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class CoursesMain extends AppCompatActivity {
 
+    public static final String add_course_term_id = "android.reserver.student.UI.term_id";
+    public static final String add_course_term_title = "android.reserver.student.UI."
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

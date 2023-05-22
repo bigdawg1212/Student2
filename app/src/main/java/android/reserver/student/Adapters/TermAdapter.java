@@ -36,7 +36,7 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
         private TextView termEndDateView;
 
 
-        private TermViewHolder(View itemView) {
+        private TermViewHolder(@NonNull View itemView) {
             super(itemView);
 
             termTitleView = itemView.findViewById(R.id.termTitle);
@@ -49,41 +49,40 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
                     listener.onItemClick(terms.get(position));
                 }
             });
+
+            /*
+            public void onClick(View view) {
+                int position = getAdapterPosition();
+                final Term current=mTerms.get(position)
+             */
         }
     }
 
-    // public Term(int term_id, String term_title, String term_start, String term_end)
-    private List<Term> mTerms;
-    private final Context context;
-    private final LayoutInflater mInflater;
-
-    public TermAdapter(Context context) {
-        mInflater = LayoutInflater.from(context);
-        this.context = context;
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
+    // public Term(int term_id, String term_title, String term_start, String term_end)
 
     @NonNull
     @Override
-    public TermAdapter.TermViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.term_list_item, parent, false);
+    public TermViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.term_list_item, parent, false);
         return new TermViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TermAdapter.TermViewHolder holder, int position) {
-        if (mTerms != null) {
-            Term currentTerm = mTerms.get(position);
-            holder.termTitleView.setText(currentTerm.getTerm_title());
-            holder.termStartDateView.setText(currentTerm.getTerm_start());
-            holder.termEndDateView.setText(currentTerm.getTerm_end());
-        } else {
-            holder.termTitleView.setText("No term title");
-        }
+    public void onBindViewHolder(@NonNull TermViewHolder holder, int position) {
+        Term currentTerm = terms.get(position);
+        holder.termTitleView.setText(currentTerm.getTerm_title());
+        holder.termStartDateView.setText(currentTerm.getTerm_start());
+        holder.termEndDateView.setText(currentTerm.getTerm_end());
     }
 
+
     public void setTerms(List<Term> terms) {
-        mTerms = terms;
+        this.terms = terms;
         notifyDataSetChanged();
     }
 
@@ -93,12 +92,10 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
 
     @Override
     public int getItemCount() {
-        if (mTerms != null) {
-            return mTerms.size();
-        } else return 0;
+        if(terms!=null) {
+            return terms.size();
+        }
+        else return 0;
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
-    }
 }

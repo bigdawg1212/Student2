@@ -63,7 +63,10 @@ public class MentorAdapter extends RecyclerView.Adapter<MentorAdapter.MentorView
 
     @Override
     public int getItemCount() {
-        return mentors.size();
+        if (mentors != null) {
+            return mentors.size();
+        }
+        else return 0;
     }
 
     public void setMentors(List<Mentor> mentors) {

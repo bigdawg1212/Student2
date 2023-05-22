@@ -13,10 +13,22 @@
         android:theme="@style/Theme.Student"
         tools:targetApi="31">
         <activity
-            android:name=".UI.AssessmentDetails"
-            android:label="Assessment Details"
-            android:parentActivityName=".UI.AssessmentsMain"
+            android:name=".AddEdit.MentorEdit"
             android:exported="false" />
+        <activity
+            android:name=".AddEdit.AssessmentEdit"
+            android:exported="false" />
+        <activity
+            android:name=".AddEdit.CourseEdit"
+            android:exported="false" />
+        <activity
+            android:name=".AddEdit.TermEdit"
+            android:exported="false" />
+        <activity
+            android:name=".UI.AssessmentDetails"
+            android:exported="false"
+            android:label="Assessment Details"
+            android:parentActivityName=".UI.AssessmentsMain" />
         <activity
             android:name=".UI.CourseDetails"
             android:exported="false"

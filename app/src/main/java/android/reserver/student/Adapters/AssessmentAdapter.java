@@ -61,7 +61,10 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
 
     @Override
     public int getItemCount() {
-        return assessments.size();
+        if (assessments!=null) {
+            return assessments.size();
+        }
+        else return 0;
     }
 
     public void setAssessments(List<Assessment> assessments) {
