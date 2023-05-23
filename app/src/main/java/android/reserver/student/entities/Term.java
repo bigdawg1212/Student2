@@ -12,8 +12,8 @@ public class Term {
     private String term_end;
 
     // Constructor
-    public Term(int term_id, String term_title, String term_start, String term_end) {
-        this.term_id = term_id;
+    public Term(String term_title, String term_start, String term_end) {
+
         this.term_title = term_title;
         this.term_start = term_start;
         this.term_end = term_end;

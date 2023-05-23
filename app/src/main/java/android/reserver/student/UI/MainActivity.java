@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Term(int term_id, String term_title, String term_start, String term_end)
-        Term term=new Term(1, "Spring", "12-12", "12-13");
+        Term term=new Term("Spring", "12-12", "12-13");
         Repository repository=new Repository(getApplication());
         repository.insertTerm(term);
 
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.addSampleData) {
 
-                Term term=new Term(1, "Spring", "12-12", "12-13");
+                Term term=new Term("Spring", "12-12", "12-13");
                 Repository repository=new Repository(getApplication());
                 repository.insertTerm(term);
 

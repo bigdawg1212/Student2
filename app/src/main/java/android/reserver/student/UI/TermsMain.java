@@ -1,5 +1,9 @@
 package android.reserver.student.UI;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +13,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.reserver.student.Adapters.TermAdapter;
@@ -29,8 +34,29 @@ import java.util.concurrent.ExecutionException;
 
 public class TermsMain extends AppCompatActivity {
 
-    public static final int ADD_TERM_REQUEST = 1;
     private TermViewModel termViewModel;
+
+    ActivityResultLauncher<Intent> activityResultLaunch2 = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+
+                        String title = data.getStringExtra(TermEdit.add_term_title);
+                        String startDate = data.getStringExtra(TermEdit.add_term_start);
+                        String endDate = data.getStringExtra(TermEdit.add_term_end);
+
+                        Term term = new Term(title, startDate, endDate);
+                        termViewModel.insertTerm(term);
+
+                        Toast.makeText(getApplicationContext(), "Term added", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Term not added", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +71,10 @@ public class TermsMain extends AppCompatActivity {
         final TermAdapter adapter = new TermAdapter();
         recyclerView.setAdapter(adapter);
 
-
         FloatingActionButton fabAddTerm=findViewById(R.id.floatingActionButton);
         fabAddTerm.setOnClickListener(v ->  {
                 Intent intent=new Intent(TermsMain.this,TermEdit.class  );
-                startActivityForResult(intent, add_term);
+                activityResultLaunch2.launch(intent);
             });
 
 
@@ -76,11 +101,11 @@ public class TermsMain extends AppCompatActivity {
                 }
 
                 if(relatedCourses > 0) {
-                    Toast.makeText(TermsMain.this, "Courses still attached. Term not deleted!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TermsMain.this, "Courses still exist. Term was not deleted.", Toast.LENGTH_SHORT).show();
                     adapter.notifyDataSetChanged();
                 } else {
                     termViewModel.deleteTerm(deletedTerm);
-                    Toast.makeText(TermsMain.this, "Term deleted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TermsMain.this, "Term was deleted.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -94,25 +119,5 @@ public class TermsMain extends AppCompatActivity {
             intent.putExtra(TermsDetails.add_term_end, term.getTerm_end());
             startActivity(intent);
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == ADD_TERM_REQUEST && resultCode == RESULT_OK) {
-//            TODO
-//              Likely convert these to UTC datetime
-            Integer term_id = data.getIntExtra(TermEdit.add_term_id, 1);
-            String title = data.getStringExtra(TermEdit.add_term_title);
-            String startDate = data.getStringExtra(TermEdit.add_term_start);
-            String endDate = data.getStringExtra(TermEdit.add_term_end);
-
-            Term term = new Term(term_id, title, startDate, endDate);
-            termViewModel.insertTerm(term);
-
-            Toast.makeText(this, "Term added", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Term not added", Toast.LENGTH_SHORT).show();
-        }
     }
 }

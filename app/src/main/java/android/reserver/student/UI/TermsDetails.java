@@ -30,12 +30,9 @@ public class TermsDetails extends AppCompatActivity {
     public static final String add_term_start = "android.reserver.student.UI.term_start";
     public static final String add_term_end = "android.reserver.student.UI.term_end";
 
-    public static final int edit_term_request = 2;
-
     private TermViewModel termViewModel;
 
     private int term_id;
-    private TextView textViewID;
     private TextView textViewTitle;
     private TextView textViewStart;
     private TextView textViewEnd;
@@ -47,7 +44,6 @@ public class TermsDetails extends AppCompatActivity {
         setContentView(R.layout.activity_terms_details);
         termViewModel = new ViewModelProvider(this).get(TermViewModel.class);
 
-        textViewID = findViewById(R.id.details_term_id);
         textViewTitle = findViewById(R.id.details_term_title);
         textViewStart = findViewById(R.id.details_term_start);
         textViewEnd = findViewById(R.id.details_term_end);
@@ -55,7 +51,6 @@ public class TermsDetails extends AppCompatActivity {
 
         Intent intent = getIntent();
         term_id = intent.getIntExtra(add_term_id, -1);
-        textViewID.setText(intent.getStringExtra(add_term_id));
         textViewTitle.setText(intent.getStringExtra(add_term_title));
         textViewStart.setText(intent.getStringExtra(add_term_start));
         textViewEnd.setText(intent.getStringExtra(add_term_end));
@@ -77,9 +72,7 @@ public class TermsDetails extends AppCompatActivity {
             editTermIntent.putExtra(TermEdit.add_term_start, intent.getStringExtra(add_term_start));
             editTermIntent.putExtra(TermEdit.add_term_end, intent.getStringExtra(add_term_end));
 
-            // startActivityForResult(editTermIntent, edit_term_request);
-            activityResultLaunch
-            Intent editTermIntent =
+            activityResultLaunch.launch(intent);
         });
     }
 
@@ -90,58 +83,33 @@ public class TermsDetails extends AppCompatActivity {
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
-                        String id = data.getStringExtra(TermEdit.add_term_id);
+
                         String title = data.getStringExtra(TermEdit.add_term_title);
                         String startDate = data.getStringExtra(TermEdit.add_term_start);
                         String endDate = data.getStringExtra(TermEdit.add_term_end);
                         int id = data.getIntExtra(TermEdit.add_term_id, -1);
                         if(id == -1) {
-                            Toast.makeText(this, "Error, term not saved", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Term did not save", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
-                        textViewID.setText(id);
                         textViewTitle.setText(title);
                         textViewStart.setText(startDate);
                         textViewEnd.setText(endDate);
 
-                        Term term = new Term(id, title, startDate, endDate);
+                        Term term = new Term(title, startDate, endDate);
                         term.setTerm_id(id);
                         termViewModel.updateTerm(term);
 
-                        Toast.makeText(this, "Term updated", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Term saved", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "Term not saved", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Term did not save", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
-    )
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == edit_term_request && resultCode == RESULT_OK) {
-            String id = data.getStringExtra(TermEdit.add_term_id);
-            String title = data.getStringExtra(TermEdit.add_term_title);
-            String startDate = data.getStringExtra(TermEdit.add_term_start);
-            String endDate = data.getStringExtra(TermEdit.add_term_end);
-            int id = data.getIntExtra(TermEdit.add_term_id, -1);
-            if(id == -1) {
-                Toast.makeText(this, "Error, term not saved", Toast.LENGTH_SHORT).show();
-                return;
-            }
+    );
 
-            textViewID.setText(id);
-            textViewTitle.setText(title);
-            textViewStart.setText(startDate);
-            textViewEnd.setText(endDate);
 
-            Term term = new Term(id, title, startDate, endDate);
-            term.setTerm_id(id);
-            termViewModel.updateTerm(term);
 
-            Toast.makeText(this, "Term updated", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Term not saved", Toast.LENGTH_SHORT).show();
-        }
-    }
+
 }
